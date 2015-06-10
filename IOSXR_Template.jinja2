@@ -1,0 +1,35 @@
+
+
+{% for vrfname,vrf  in cust_vrf_name.items() %}
+vrf {{ vrf }}
+ address-family {{ Address_FAMILY }} unicast
+  import route-target
+   {{ RT }}
+  !
+  export route-target
+   {{ RT }}
+  !
+
+{% for intfname, intf  in vrf_interface.items() %}
+interface {{ intf }}
+vrf {{ vrf }}
+{% endfor %}
+{% endfor %}
+
+{% for intfname, intfaddress  in int_to_ipmap.items() %}
+interface {{ intfname }}
+ip address {{ intfaddress }}
+{% endfor %}
+
+
+router bgp {{ BGP_ASN }}
+{% for vrfname,vrf  in cust_vrf_name.items() %}
+vrf {{ vrf }}
+  rd {{ RD }}
+  address-family ipv4 unicast
+{% endfor %}
+exit
+exit
+exit
+
+
