@@ -1,0 +1,18 @@
+
+{% for vrfname,vrf  in cust_vrf_name.items() %}
+set routing-instances {{ vrf }} instance-type vrf
+set routing-instances {{ vrf }} description "Test"
+set routing-instances {{ vrf }} route-distinguisher {{ RD }}
+set routing-instances {{ vrf }} vrf-target target:{{ RT }}
+set routing-instances {{ vrf }} vrf-table-label;
+{% for intfname, intfaddress  in int_to_ipmap.items() %}
+set routing-instances {{ vrf }} interface {{ intfname }}
+{% endfor %}
+{% endfor %}
+
+{% for intfname, intfaddress  in int_to_ipmap.items() %}
+set interfaces {{ intfname }} unit 0 family inet address {{ intfaddress }}
+{% endfor %}
+
+set routing-options autonomous-system {{ BGP_ASN }};
+
